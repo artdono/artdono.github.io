@@ -1,0 +1,305 @@
+{
+  "meta": {
+    "name": "Dono Artyk",
+    "title": "DevOps Engineer",
+    "site_url": "https://donoartyk.github.io",
+    "description": "DevOps Engineer with 5+ years building AWS and Kubernetes platforms, and agentic AI engineering workflows with Claude Code and MCP.",
+    "og_description": "Shared infrastructure on AWS and Kubernetes — platform services, GitOps delivery, and agentic AI engineering workflows.",
+    "theme_default": "light"
+  },
+  "nav": [
+    {
+      "label": "Home",
+      "href": "#top"
+    },
+    {
+      "label": "Experience",
+      "href": "#experience"
+    },
+    {
+      "label": "Projects",
+      "href": "#projects"
+    },
+    {
+      "label": "Stack",
+      "href": "#stack"
+    },
+    {
+      "label": "About",
+      "href": "#about"
+    },
+    {
+      "label": "Contact",
+      "href": "#contact"
+    }
+  ],
+  "hero": {
+    "eyebrow": "DevOps Engineer",
+    "name": "Dono Artyk",
+    "location": "Chicago, IL",
+    "availability": [
+      "Open to relocation",
+      "No sponsorship required"
+    ],
+    "intro": [
+      "I'm a DevOps engineer with 5+ years building AWS and Kubernetes platforms.",
+      "I work on the shared infrastructure layer — the part that lets application teams deploy, secure, observe, and operate their services without each one solving TLS, DNS, identity, and secrets on its own.",
+      "Lately most of my work has been agentic AI engineering with Claude Code and MCP: automated pull-request review, requirement traceability, and custom agent skills running across an organization's repositories.",
+      "I like systems that keep working when nobody is watching them."
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/dono-artyk",
+        "kind": "primary"
+      },
+      {
+        "label": "Email",
+        "href": "mailto:artykdono@gmail.com",
+        "kind": "secondary"
+      }
+    ],
+    "metrics": [
+      {
+        "value": "$31K/yr",
+        "label": "licensing spend removed"
+      },
+      {
+        "value": "400+",
+        "label": "pull requests auto-reviewed"
+      },
+      {
+        "value": "40+",
+        "label": "microservices replatformed"
+      }
+    ],
+    "kicker": "Hey, I'm Dono."
+  },
+  "experience": [
+    {
+      "company": "Uptake",
+      "role": "DevOps Engineer",
+      "location": "Chicago, IL",
+      "period": "Jul 2023 — Present",
+      "bullets": [
+        "Built Claude Code and MCP pull-request review automation across 30+ repositories and 400+ pull requests, catching missing requirements, security issues, and exposed secrets before human review.",
+        "Replaced ingress-nginx with Kubernetes Gateway API and AWS Load Balancer Controller across 5 application teams, cutting production traffic over through weighted Route 53 shifts and connection draining.",
+        "Owned cert-manager, external-dns, and Secrets Store CSI Driver on multi-tenant production EKS — automated DNS-01 certificate issuance and moved 8 services to IAM-scoped runtime secret mounts.",
+        "Built HA Prometheus, Grafana, and Alertmanager for non-production, removing ~$31K/year in licensing spend, and set 99.9% SLOs with burn-rate alerting that cut page volume 45%.",
+        "Ran ArgoCD App-of-Apps and Helm delivery for 5 application teams, giving 20+ engineers Git-based releases, drift detection, and a repeatable rollback path."
+      ]
+    },
+    {
+      "company": "Okta",
+      "role": "DevOps Engineer",
+      "location": "San Francisco, CA",
+      "period": "Apr 2022 — Jun 2023",
+      "bullets": [
+        "Replatformed the infrastructure behind 40+ containerized EKS microservices from CloudFormation to reusable Terraform modules, with zero-downtime cluster and private-node cutovers.",
+        "Replaced static AWS credentials across 45+ GitHub Actions pipelines with short-lived, least-privilege IAM roles through OIDC federation.",
+        "Moved Lambda, API Gateway, and DynamoDB from AWS CDK to Terraform, bringing serverless resources under the same IaC workflow with OAuth 2.0 / OIDC authentication.",
+        "Containerized a legacy Flask/MySQL production application and migrated its four services from Docker Compose to Kubernetes with EBS-backed persistent storage."
+      ]
+    },
+    {
+      "company": "Okta",
+      "role": "Cloud Engineer",
+      "location": "San Francisco, CA",
+      "period": "Jan 2021 — Mar 2022",
+      "bullets": [
+        "Automated AWS account provisioning across 35+ accounts with Control Tower and Service Control Policies, cutting environment setup from 3 days to under 2 hours.",
+        "Removed 10+ hours of weekly operational toil with Python/boto3 and Ansible automation for cross-account S3 lifecycle and patch-compliance workflows.",
+        "Brought unmanaged VPC networking, IAM deployment roles, and S3 infrastructure into Terraform modules and state, replacing manual cloud changes with repeatable IaC and drift detection."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Agentic PR review platform",
+      "problem": "Teams adopting AI-assisted coding could suddenly write code far faster than senior engineers could review it. The bottleneck just moved downstream.",
+      "bullets": [
+        "Automated first-pass review across 30+ repositories and 400+ pull requests, wired in as one reusable CI workflow instead of thirty separate copies.",
+        "Pulls the ticket's acceptance criteria alongside the diff, so the review catches missing requirements — not just style.",
+        "Advisory by design: the agent comments, and humans plus deterministic checks still decide what merges."
+      ],
+      "tech": [
+        "Claude Code",
+        "MCP",
+        "GitHub Actions",
+        "Python",
+        "Terraform",
+        "Kubernetes"
+      ],
+      "code": {
+        "title": ".github/workflows/pr-review.yml",
+        "lines": [
+          "name: pr-review",
+          "on:",
+          "  pull_request:",
+          "    types: [opened, reopened]   # not on every push",
+          "",
+          "jobs:",
+          "  review:",
+          "    uses: org/.github/workflows/review.yml@v2",
+          "    with:",
+          "      profile: terraform     # infra != app review",
+          "      require_ticket: true   # vs. acceptance criteria",
+          "    permissions:",
+          "      contents: read         # advisory - cannot merge",
+          "      pull-requests: write"
+        ]
+      }
+    },
+    {
+      "name": "Shared Kubernetes platform layer",
+      "problem": "Every team on the cluster needed the same four things — a hostname, TLS, AWS access, and credentials — and each one was solving them by hand, differently.",
+      "bullets": [
+        "Automated certificate issuance end to end with DNS-01 validation, so renewal stopped being something a person has to remember.",
+        "Gave every workload its own identity: an IAM role scoped to exactly one secret, and no static AWS keys anywhere in the cluster.",
+        "Eight workloads moved onto the standardized pattern — two as deep implementations, six as adoption once the pattern existed."
+      ],
+      "tech": [
+        "EKS",
+        "cert-manager",
+        "external-dns",
+        "Secrets Store CSI",
+        "Terraform",
+        "Route 53"
+      ],
+      "code": {
+        "title": "httproute.yaml - all an application team writes",
+        "lines": [
+          "apiVersion: gateway.networking.k8s.io/v1",
+          "kind: HTTPRoute",
+          "metadata:",
+          "  name: reporting-api",
+          "  annotations:",
+          "    external-dns.alpha.kubernetes.io/hostname:",
+          "      api.example.com",
+          "spec:",
+          "  parentRefs: [{ name: platform-gateway }]",
+          "  hostnames: [\"api.example.com\"]",
+          "  rules:",
+          "    - backendRefs: [{ name: api, port: 8080 }]",
+          "",
+          "# DNS records, certificate issuance, the ACM import",
+          "# and the IAM role behind it are the platform's job."
+        ]
+      }
+    },
+    {
+      "name": "GitOps delivery for a streaming pipeline",
+      "problem": "A six-component streaming stack was deployed imperatively from CI — so CI held cluster credentials, ordering was guesswork, and a manual change to a live resource silently won.",
+      "bullets": [
+        "Replaced push-based deploys with pull-based GitOps: the cluster reconciles toward Git, and CI never holds cluster credentials.",
+        "Dependency order is declared rather than timed — each stage waits on the previous one being genuinely healthy, not on a sleep.",
+        "Nothing sensitive in the repository; the database pulls its credentials at runtime through workload identity."
+      ],
+      "tech": [
+        "ArgoCD",
+        "Kubernetes",
+        "Kafka",
+        "Helm",
+        "Terraform",
+        "AWS Secrets Manager"
+      ],
+      "code": {
+        "title": "apps/kafka.yaml",
+        "lines": [
+          "apiVersion: argoproj.io/v1alpha1",
+          "kind: Application",
+          "metadata:",
+          "  name: kafka",
+          "  annotations:",
+          "    argocd.argoproj.io/sync-wave: \"1\"   # CRDs are 0",
+          "spec:",
+          "  source:",
+          "    path: components/kafka  # git is the only way in",
+          "  destination:",
+          "    namespace: streaming",
+          "  syncPolicy:",
+          "    automated:",
+          "      prune: true           # gone from git, gone here",
+          "      selfHeal: true        # drift reconciled back"
+        ]
+      }
+    }
+  ],
+  "stack": {
+    "groups": [
+      {
+        "name": "Cloud & Infrastructure",
+        "items": [
+          "AWS",
+          "Kubernetes (EKS)",
+          "Terraform",
+          "Helm",
+          "Docker",
+          "Linux"
+        ]
+      },
+      {
+        "name": "Delivery & GitOps",
+        "items": [
+          "ArgoCD",
+          "GitHub Actions",
+          "Gateway API",
+          "OIDC federation"
+        ]
+      },
+      {
+        "name": "Observability & Automation",
+        "items": [
+          "Prometheus",
+          "Grafana",
+          "Alertmanager",
+          "Python",
+          "Bash"
+        ]
+      }
+    ],
+    "ai_line": "Agentic AI is part of how I work day to day — Claude Code, MCP integrations, and custom agent skills wired into real engineering workflows, with human review kept authoritative.",
+    "certifications": [
+      "CKA",
+      "CKAD",
+      "AWS Solutions Architect — Associate",
+      "HashiCorp Terraform Associate"
+    ]
+  },
+  "about": {
+    "heading": "About me",
+    "paragraphs": [
+      "I'm curious by nature and usually happiest when I'm figuring something out. I like problems where the answer isn't obvious and tend to keep pulling the thread until everything finally makes sense. I'm always looking for something new to learn, explore, or understand a little more deeply.",
+      "Outside of work, you'll usually find me hiking, doing yoga, planning my next trip, or experimenting with a new recipe. I love discovering new kinds of tea, and I'm always looking for a book that stays with me — <em>The Choice</em> by Edith Eger is one I keep coming back to.",
+      "I like being active, exploring new places, and keeping life interesting. I'm probably already thinking about what to learn, cook, read, or see next."
+    ],
+    "portrait": {
+      "src": "assets/images/portrait.jpg",
+      "alt": "Portrait of Dono Artyk"
+    },
+    "photos": [
+      {
+        "src": "assets/images/about/photo-1.jpg",
+        "alt": "On a hiking trail",
+        "caption": "Somewhere on a trail"
+      },
+      {
+        "src": "assets/images/about/photo-2.jpg",
+        "alt": "Tea being prepared",
+        "caption": "Working through the tea list"
+      },
+      {
+        "src": "assets/images/about/photo-3.jpg",
+        "alt": "A view from a recent trip",
+        "caption": "The next trip, already planned"
+      }
+    ]
+  },
+  "contact": {
+    "heading": "Let's build something",
+    "line": "I'm open to DevOps and platform engineering roles — in Chicago or elsewhere. The fastest way to reach me is email.",
+    "email": "artykdono@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/dono-artyk",
+    "linkedin_label": "linkedin.com/in/dono-artyk"
+  }
+}
