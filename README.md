@@ -1,6 +1,6 @@
-# donoartyk.github.io
+# artdono.github.io
 
-My personal site — a single scrolling page at **https://donoartyk.github.io**.
+My personal site — a single scrolling page at **https://artdono.github.io**.
 
 Static HTML, CSS and a little vanilla JavaScript. No framework, no npm, no build
 tooling to keep alive. The page is plain HTML by the time it reaches a browser,
