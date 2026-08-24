@@ -305,6 +305,10 @@
     "line": "I'm open to DevOps and platform engineering roles — in Chicago or elsewhere. The fastest way to reach me is email.",
     "email": "artykdono@gmail.com",
     "linkedin": "https://www.linkedin.com/in/dono-artyk",
-    "linkedin_label": "linkedin.com/in/dono-artyk"
+    "linkedin_label": "linkedin.com/in/dono-artyk",
+    "resume": {
+      "href": "assets/docs/dono-artyk-resume.pdf",
+      "label": "Download PDF"
+    }
   }
 }

@@ -55,6 +55,22 @@ python3 scripts/check_links.py     # every link and asset resolves
 Both run in CI on every push to `main`, and the site deploys to GitHub Pages
 only after they pass.
 
+## Regenerating the résumé PDF
+
+`assets/docs/dono-artyk-resume.pdf` is generated from the résumé master in the
+interview-prep repository — this repo never holds a second copy of that text.
+The generator strips the phone number, so the public PDF carries email,
+LinkedIn and this site, and nothing else.
+
+```bash
+python3 scripts/resume_pdf.py ../interview-prep-dono/resume/resume.md \
+    --out build/resume.html
+# then print build/resume.html to PDF at Letter size with background graphics on
+```
+
+Check it still fits on one page before committing. The layout is tuned to about
+94% of a page, so a couple of extra lines are fine and a new job is not.
+
 ## Deployment
 
 GitHub Actions builds, verifies and publishes to GitHub Pages on every push to

@@ -3,3 +3,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# generated intermediate for the resume PDF
+build/

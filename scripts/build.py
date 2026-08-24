@@ -346,6 +346,10 @@ def build(data: dict) -> str:
             <span class="label">LinkedIn</span>
             <a href="{attr(contact["linkedin"])}" rel="me noopener" target="_blank">{esc(contact["linkedin_label"])}</a>
           </div>
+          <div class="contact-item">
+            <span class="label">Résumé</span>
+            <a href="{attr(contact["resume"]["href"])}" download>{esc(contact["resume"]["label"])}</a>
+          </div>
         </div>
       </div>
     </div>
