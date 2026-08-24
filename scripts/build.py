@@ -137,7 +137,11 @@ def build(data: dict) -> str:
     )
 
     hero_meta_items = [hero["location"], *hero["availability"]]
-    hero_meta = sep_join(hero_meta_items, nowrap=True)
+    # Laid out as flex items with spacing rather than "·" separators, so a
+    # wrap can never strand a separator at the start of a line.
+    hero_meta = "".join(
+        f'<span class="nb">{esc(item)}</span>' for item in hero_meta_items
+    )
 
     hero_intro = "".join(f"<p>{esc(p)}</p>" for p in hero["intro"])
 
