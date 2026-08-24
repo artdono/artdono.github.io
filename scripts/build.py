@@ -68,16 +68,23 @@ def highlight(line: str) -> str:
 
 
 # --- Fragments -------------------------------------------------------------
-def sep_join(items, cls="sep", char="·"):
-    glue = f'<span class="{cls}">{char}</span>'
-    return glue.join(esc(i) for i in items)
+def sep_join(items, cls="sep", char="·", nowrap=False):
+    """Join with a separator that never ends a line: the break can happen in
+    the space before the dot, and a non-breaking space ties the dot to the
+    item that follows it. With nowrap, each item also stays whole."""
+    glue = f' <span class="{cls}">{char}</span>&nbsp;'
+    parts = [
+        f'<span class="nb">{esc(i)}</span>' if nowrap else esc(i)
+        for i in items
+    ]
+    return glue.join(parts)
 
 
 def section_head(num: str, title: str) -> str:
     return (
         '<div class="section-head reveal">'
-        f'<span class="section-num">{esc(num)}</span>'
-        f'<h2 class="display">{esc(title)}</h2>'
+        f'<span class="eyebrow">{esc(num)}</span>'
+        f"<h2>{esc(title)}</h2>"
         "</div>"
     )
 
@@ -103,8 +110,24 @@ ICON_ARROW = (
 )
 
 
+def font_preloads() -> str:
+    """Preload the two faces that draw the first screen, by whatever hashed
+    filename scripts/fetch_fonts.py last wrote."""
+    fonts = ROOT / "assets" / "fonts"
+    links = []
+    for prefix in ("inter-", "newsreader-400-normal"):
+        match = sorted(fonts.glob(f"{prefix}*.woff2"))
+        if match:
+            href = f"assets/fonts/{match[0].name}"
+            links.append(
+                f'<link rel="preload" href="{href}" as="font" type="font/woff2" crossorigin>'
+            )
+    return "\n".join(links)
+
+
 def build(data: dict) -> str:
     meta = data["meta"]
+    preloads = font_preloads()
     hero = data["hero"]
     contact = data["contact"]
     about = data["about"]
@@ -114,7 +137,7 @@ def build(data: dict) -> str:
     )
 
     hero_meta_items = [hero["location"], *hero["availability"]]
-    hero_meta = sep_join(hero_meta_items)
+    hero_meta = sep_join(hero_meta_items, nowrap=True)
 
     hero_intro = "".join(f"<p>{esc(p)}</p>" for p in hero["intro"])
 
@@ -133,9 +156,12 @@ def build(data: dict) -> str:
 
     roles = "".join(
         '<article class="role reveal">'
-        "<div>"
+        '<div class="role-head">'
+        '<div class="role-title">'
         f'<h3 class="role-company">{esc(r["company"])}</h3>'
-        f'<p class="role-role">{esc(r["role"])}</p>'
+        '<span class="role-dash">/</span>'
+        f'<span class="role-role">{esc(r["role"])}</span>'
+        "</div>"
         f'<p class="role-when">{esc(r["period"])}<span class="sep">·</span>{esc(r["location"])}</p>'
         "</div>"
         '<ul class="bullets">'
@@ -152,6 +178,12 @@ def build(data: dict) -> str:
         projects += (
             '<article class="project reveal">'
             '<div class="project-grid">'
+            '<div class="project-code">'
+            f'<span class="code-file">{esc(code["title"])}</span>'
+            '<div class="code">'
+            f"<pre><code>{code_lines}</code></pre>"
+            "</div>"
+            "</div>"
             "<div>"
             f'<h3>{esc(project["name"])}</h3>'
             f'<p class="project-problem">{esc(project["problem"])}</p>'
@@ -159,10 +191,6 @@ def build(data: dict) -> str:
             + "".join(f"<li>{esc(b)}</li>" for b in project["bullets"])
             + "</ul>"
             f'<p class="tech-line">{sep_join(project["tech"])}</p>'
-            "</div>"
-            '<div class="code">'
-            f'<div class="code-bar"><span class="dot"></span><span>{esc(code["title"])}</span></div>'
-            f"<pre><code>{code_lines}</code></pre>"
             "</div>"
             "</div>"
             "</article>"
@@ -176,10 +204,11 @@ def build(data: dict) -> str:
         for group in data["stack"]["groups"]
     )
 
-    certs = "".join(f'<span class="cert">{esc(c)}</span>' for c in data["stack"]["certifications"])
+    certs = sep_join(data["stack"]["certifications"], nowrap=True)
 
     about_prose = "".join(f"<p>{esc(p)}</p>" for p in about["paragraphs"])
-    portrait = figure(about["portrait"], "portrait", "portrait")
+    portrait = figure(about["portrait"], "portrait", "photo")
+    hero_photo = figure(hero["photo"], "hero-photo", "portrait")
     photos = "".join(figure(p, "", "photo") for p in about["photos"])
 
     year = "2026"
@@ -209,11 +238,9 @@ def build(data: dict) -> str:
 <meta name="twitter:image" content="{attr(canonical)}assets/images/og-preview.png">
 
 <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f2efe7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f5f2">
 
-<link rel="preload" href="assets/fonts/archivo-400-800-normal-4c18bb.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/newsreader-400-normal-c12324.woff2" as="font" type="font/woff2" crossorigin>
+{preloads}
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
 
@@ -252,11 +279,18 @@ def build(data: dict) -> str:
 <main id="main">
 
   <section class="hero wrap">
-    <p class="hero-kicker">{esc(hero["kicker"])}</p>
-    <h1 class="display">{esc(hero["name"])}<span class="thin">{esc(hero["eyebrow"])}</span></h1>
-    <p class="hero-meta">{hero_meta}</p>
-    <div class="hero-intro">{hero_intro}</div>
-    <div class="hero-actions">{hero_actions}</div>
+    <div class="hero-grid">
+      <div class="hero-lead">
+        <h1>{esc(hero["name"])}</h1>
+        <p class="hero-role">{esc(hero["eyebrow"])}</p>
+      </div>
+      {hero_photo}
+      <div class="hero-body">
+        <p class="hero-meta">{hero_meta}</p>
+        <div class="hero-intro">{hero_intro}</div>
+        <div class="hero-actions">{hero_actions}</div>
+      </div>
+    </div>
     <div class="metrics">{metrics}</div>
   </section>
 
@@ -296,12 +330,18 @@ def build(data: dict) -> str:
 
   <section class="section" id="contact">
     <div class="wrap">
-      <div class="contact-card reveal">
-        <h2 class="display">{esc(contact["heading"])}</h2>
+      <div class="reveal">
+        {section_head("05", esc(contact["heading"]))}
         <p class="contact-line">{esc(contact["line"])}</p>
-        <div class="contact-actions">
-          <a class="btn" href="mailto:{attr(contact["email"])}">{esc(contact["email"])}{ICON_ARROW}</a>
-          <a class="btn" href="{attr(contact["linkedin"])}" rel="me noopener" target="_blank">LinkedIn{ICON_ARROW}</a>
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="label">Email</span>
+            <a href="mailto:{attr(contact["email"])}">{esc(contact["email"])}</a>
+          </div>
+          <div class="contact-item">
+            <span class="label">LinkedIn</span>
+            <a href="{attr(contact["linkedin"])}" rel="me noopener" target="_blank">{esc(contact["linkedin_label"])}</a>
+          </div>
         </div>
       </div>
     </div>

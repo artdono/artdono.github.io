@@ -9,9 +9,9 @@
   var themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", function () {
-      var explicit = root.getAttribute("data-theme");
-      var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      var current = explicit || (systemDark ? "dark" : "light");
+      /* Light is the default for everyone, whatever the operating system is
+         set to — so "no choice yet" means light, not "follow the system". */
+      var current = root.getAttribute("data-theme") || "light";
       var next = current === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("theme", next); } catch (e) {}

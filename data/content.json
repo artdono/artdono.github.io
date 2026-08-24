@@ -73,7 +73,10 @@
         "label": "microservices replatformed"
       }
     ],
-    "kicker": "Hey, I'm Dono."
+    "photo": {
+      "src": "assets/images/portrait.jpg",
+      "alt": "Dono Artyk, DevOps Engineer"
+    }
   },
   "experience": [
     {
@@ -253,6 +256,7 @@
           "Prometheus",
           "Grafana",
           "Alertmanager",
+          "Datadog",
           "Python",
           "Bash"
         ]
@@ -274,29 +278,30 @@
       "I like being active, exploring new places, and keeping life interesting. I'm probably already thinking about what to learn, cook, read, or see next."
     ],
     "portrait": {
-      "src": "assets/images/portrait.jpg",
-      "alt": "Portrait of Dono Artyk"
+      "src": "assets/images/about/photo-1.jpg",
+      "alt": "Pouring tea at a cafe",
+      "caption": "Tea, taken seriously"
     },
     "photos": [
       {
-        "src": "assets/images/about/photo-1.jpg",
-        "alt": "On a hiking trail",
-        "caption": "Somewhere on a trail"
-      },
-      {
         "src": "assets/images/about/photo-2.jpg",
-        "alt": "Tea being prepared",
-        "caption": "Working through the tea list"
+        "alt": "Jumping in front of the Lennon Wall in Prague",
+        "caption": "Lennon Wall, Prague"
       },
       {
         "src": "assets/images/about/photo-3.jpg",
-        "alt": "A view from a recent trip",
-        "caption": "The next trip, already planned"
+        "alt": "Sitting on a footbridge below a mountain range",
+        "caption": "Worth the early start"
+      },
+      {
+        "src": "assets/images/about/photo-4.jpg",
+        "alt": "Standing beside a tall tower built from books",
+        "caption": "A tower of books"
       }
     ]
   },
   "contact": {
-    "heading": "Let's build something",
+    "heading": "Get in touch",
     "line": "I'm open to DevOps and platform engineering roles — in Chicago or elsewhere. The fastest way to reach me is email.",
     "email": "artykdono@gmail.com",
     "linkedin": "https://www.linkedin.com/in/dono-artyk",

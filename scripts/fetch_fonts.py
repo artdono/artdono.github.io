@@ -12,9 +12,9 @@ import urllib.request
 
 QUERY = (
     "https://fonts.googleapis.com/css2"
-    "?family=Archivo:wdth,wght@75..100,400..800"          # variable: needs the width axis
-    "&family=Newsreader:ital,wght@0,400;0,500;1,400"       # static instances: much smaller
-    "&family=JetBrains+Mono:wght@400;500"
+    "?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400"   # display + accents
+    "&family=Inter:wght@400;500;600"                          # reading copy
+    "&family=JetBrains+Mono:wght@400;500"                     # meta and config
     "&display=swap"
 )
 KEEP_SUBSETS = {"latin"}

@@ -27,7 +27,10 @@ def pending_photos() -> set[str]:
     """
     data = json.loads(CONTENT.read_text(encoding="utf-8"))
     about = data["about"]
-    return {about["portrait"]["src"]} | {photo["src"] for photo in about["photos"]}
+    return (
+        {data["hero"]["photo"]["src"], about["portrait"]["src"]}
+        | {photo["src"] for photo in about["photos"]}
+    )
 
 
 class Collector(HTMLParser):
