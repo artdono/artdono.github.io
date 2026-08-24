@@ -103,6 +103,12 @@ def figure(photo: dict, extra_class: str = "", placeholder: str = "photo") -> st
     )
 
 
+ICON_EXTERNAL = (
+    '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" '
+    'aria-hidden="true"><path d="M7 13l6-6M8 7h5v5" stroke-linecap="round" '
+    'stroke-linejoin="round"/></svg>'
+)
+
 ICON_ARROW = (
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" '
     'aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke-linecap="round" '
@@ -146,7 +152,13 @@ def build(data: dict) -> str:
     hero_intro = "".join(f"<p>{esc(p)}</p>" for p in hero["intro"])
 
     hero_actions = "".join(
-        f'<a class="btn btn-{link["kind"]}" href="{attr(link["href"])}">{esc(link["label"])}{ICON_ARROW}</a>'
+        '<a class="btn btn-{kind}" href="{href}"{new_tab}>{label}{icon}</a>'.format(
+            kind=link["kind"],
+            href=attr(link["href"]),
+            new_tab=' target="_blank" rel="noopener"' if link.get("new_tab") else "",
+            label=esc(link["label"]),
+            icon=ICON_EXTERNAL if link.get("new_tab") else ICON_ARROW,
+        )
         for link in hero["links"]
     )
 
@@ -347,8 +359,8 @@ def build(data: dict) -> str:
             <a href="{attr(contact["linkedin"])}" rel="me noopener" target="_blank">{esc(contact["linkedin_label"])}</a>
           </div>
           <div class="contact-item">
-            <span class="label">Résumé</span>
-            <a href="{attr(contact["resume"]["href"])}" download>{esc(contact["resume"]["label"])}</a>
+            <span class="label">Resume</span>
+            <a href="{attr(contact["resume"]["href"])}" target="_blank" rel="noopener">{esc(contact["resume"]["label"])}</a>
           </div>
         </div>
       </div>

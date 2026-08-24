@@ -51,12 +51,19 @@
       {
         "label": "LinkedIn",
         "href": "https://www.linkedin.com/in/dono-artyk",
-        "kind": "primary"
+        "kind": "primary",
+        "new_tab": true
       },
       {
         "label": "Email",
         "href": "mailto:artykdono@gmail.com",
         "kind": "secondary"
+      },
+      {
+        "label": "Resume",
+        "href": "assets/docs/dono-artyk-resume.pdf",
+        "kind": "secondary",
+        "new_tab": true
       }
     ],
     "metrics": [
@@ -308,7 +315,7 @@
     "linkedin_label": "linkedin.com/in/dono-artyk",
     "resume": {
       "href": "assets/docs/dono-artyk-resume.pdf",
-      "label": "Download PDF"
+      "label": "Open PDF"
     }
   }
 }
